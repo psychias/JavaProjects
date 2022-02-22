@@ -40,6 +40,54 @@ public class Employee {
 	}
 	
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public AdressInfo getWorkAdress() {
+		return workAdress;
+	}
+
+	public void setWorkAdress(AdressInfo workAdress) {
+		this.workAdress = workAdress;
+	}
+
+	public AdressInfo getHomeAdress() {
+		return homeAdress;
+	}
+
+	public void setHomeAdress(AdressInfo homeAdress) {
+		this.homeAdress = homeAdress;
+	}
+
+	public int getDebt() {
+		return debt;
+	}
+
+	public void setDebt(int debt) {
+		this.debt = debt;
+	}
+
+	public int getReminder() {
+		return reminder;
+	}
+
+	public void setReminder(int reminder) {
+		this.reminder = reminder;
+	}
+
 	public void pay(int amount) {
 		this.debt = this.debt - amount;
 	}
