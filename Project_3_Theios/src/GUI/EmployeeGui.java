@@ -35,6 +35,9 @@ public class EmployeeGui extends JFrame {
 	private JTextField textWPhone;
 	private JTextField textAmount;
 	private JButton btnSubmit;
+	private JButton btnDelete;
+	private JButton btnClear;
+	private JButton btnEdit;
 	private JTable table = new JTable();;
 	private JScrollPane scrollPane = new JScrollPane();
 	private DefaultTableModel model;
@@ -49,7 +52,8 @@ public class EmployeeGui extends JFrame {
 
 		// model pinaka
 		String colNames[] = { "Name", "Debth", "Home Phone", "Work Phone", "Rem" };
-		model = new DefaultTableModel(colNames, 0); // Ttitloi = kefalides pinaka
+		model = new DefaultTableModel(colNames, 0); // Ttitloi = kefalides pinaka 
+		//							Object[] columnNames, int rowCount
 		for (Employee e : Main.employees) {
 			Object[] objs = { e.getName(), e.getDebt(), e.getHomeAdress().getPhone(), e.getWorkAdress().getPhone(),
 					e.getReminder() };
@@ -169,9 +173,66 @@ public class EmployeeGui extends JFrame {
 		btnSubmit.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				addEmployee();
-				String text = textFieldName.getText() + " " + textHomeAdress.getText();
-				messageShow message = new messageShow(text);
+	
+				if (textFieldName.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null,  "name field is empty ");
+					return;
+				}
+				else if (textHomeAdress.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null,  "home adress field is empty ");
+					return;
+				}
+				else if (textHomeZip.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null,  "home zip code field is empty ");
+					return;
+				}
+				else if (textHomeTown.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null,  "home town field is empty ");
+					return;
+				}
+				else if (textHCountry.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null,  "home country field is empty ");
+					return;
+				}
+				else if (textHPhone.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null,  "home phone number field is empty ");
+					return;
+				}
+				
+				else if (textWAdress.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null,  "work adress field is empty ");
+					return;
+				}
+				else if (textWTown.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null,  "work town field is empty ");
+					return;
+				}
+				else if (textWCountry.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null,  "work country is empty ");
+					return;
+				}
+				else if (textWZipCode.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null,  "work zip code field is empty ");
+					return;
+				}
+				else if (textWPhone.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null,  "work phone number field is empty ");
+					return;
+				}
+				
+				else if (textWPhone.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null,  "work phone number field is empty ");
+					return;
+				}
+				else if (textAmount.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null,  "the amount field is empty ");
+					return;
+				}else {
+
+					addEmployee();
+	//				String text = textFieldName.getText() + " " + textHomeAdress.getText();
+	//				messageShow message = new messageShow(text);
+					}
 
 			}
 		});
@@ -184,20 +245,28 @@ public class EmployeeGui extends JFrame {
 
 		scrollPane.setViewportView(table);
 
-		JButton btnEdit = new JButton("Edit");
+		btnEdit = new JButton("Edit");
 		btnEdit.setBounds(131, 405, 117, 29);
 		contentPane.add(btnEdit);
 
-		JButton btnDelete = new JButton("Delete");
+		btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				delete();
+			}
+		});
 		btnDelete.setBounds(258, 405, 117, 29);
 		contentPane.add(btnDelete);
 
-		JButton btnClear = new JButton("Clear");
+		btnClear = new JButton("Clear");
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				clearText();
 			}
 		});
+		
 		btnClear.setBounds(7, 446, 368, 26);
 		contentPane.add(btnClear);
 
@@ -206,16 +275,16 @@ public class EmployeeGui extends JFrame {
 				int row = table.rowAtPoint(e.getPoint());
 				textFieldName.setText(Main.employees.get(row).getName());
 				textHomeAdress.setText(Main.employees.get(row).getHomeAdress().getAdress());
-//				private JTextField textHomeTown;
-//				private JTextField textHomeZip;
-//				private JTextField textHCountry;
-//				private JTextField textHPhone;
-//				private JTextField textWAdress;
-//				private JTextField textWTown;
-//				private JTextField textWZipCode;
-//				private JTextField textWCountry;
-//				private JTextField textWPhone;
-//				private JTextField textAmount;
+				textHomeTown.setText(Main.employees.get(row).getHomeAdress().getTown());
+				textHomeZip.setText(Main.employees.get(row).getHomeAdress().getCountry());
+				textHomeZip.setText(Main.employees.get(row).getHomeAdress().getPhone());
+				textHomeZip.setText(Main.employees.get(row).getWorkAdress().getAdress());
+				textHomeZip.setText(Main.employees.get(row).getWorkAdress().getTown());
+				textHomeZip.setText(Integer.toString(Main.employees.get(row).getWorkAdress().getZipCode()));
+				textHomeZip.setText(Main.employees.get(row).getWorkAdress().getCountry());
+				textHomeZip.setText(Main.employees.get(row).getWorkAdress().getPhone());
+				textHomeZip.setText(Integer.toString(Main.employees.get(row).getDebt()));
+
 			}
 		});
 
@@ -227,16 +296,14 @@ public class EmployeeGui extends JFrame {
 	protected void clearText() {
 		textFieldName.setText("");
 		textHomeAdress.setText("");
-//		private JTextField textHomeTown;
-//		private JTextField textHomeZip;
-//		private JTextField textHCountry;
-//		private JTextField textHPhone;
-//		private JTextField textWAdress;
-//		private JTextField textWTown;
-//		private JTextField textWZipCode;
-//		private JTextField textWCountry;
-//		private JTextField textWPhone;
-//		private JTextField textAmount;
+		textHomeTown.setText("");
+		textHomeZip.setText("");
+		textHCountry.setText("");
+		textHPhone.setText("");
+		textWZipCode.setText("");
+		textWPhone.setText("");
+		textWCountry.setText("");
+		textAmount.setText("");
 
 	}
 
@@ -270,6 +337,27 @@ public class EmployeeGui extends JFrame {
 		for (Employee e : Main.employees) {
 			e.Reminder();
 
+		}
+
+	}
+	
+	protected void delete(){
+		
+		//get table model 
+		//DefaultTableModel model = (DefaultTableModel) table.getModel();
+		
+		
+		//delete row
+		if(table.getRowCount() == 1) {
+			model.removeRow(table.getSelectedRow());
+			
+		}else {
+			if(table.getRowCount() == 0) {
+				JOptionPane.showMessageDialog(this, "Table is empty");
+			
+		}else {
+			JOptionPane.showMessageDialog(this, "choose a single row to delete");
+			}
 		}
 
 	}
