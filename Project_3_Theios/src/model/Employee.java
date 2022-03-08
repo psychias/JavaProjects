@@ -1,5 +1,9 @@
 package model;
 
+import javax.swing.JOptionPane;
+
+import exception.MyException;
+
 public class Employee {
 	
 	private String name,text;
@@ -8,8 +12,7 @@ public class Employee {
 	private int debt;
 	private int reminder;
 	
-	public Employee(String name, AdressInfo workAdress, AdressInfo homeAdress, int debt) {
-		super();
+	public Employee(String name, AdressInfo workAdress, AdressInfo homeAdress, int debt) throws MyException{
 		this.name = name;
 		this.workAdress = workAdress;
 		this.homeAdress = homeAdress;
@@ -19,8 +22,59 @@ public class Employee {
 	
 	public Employee(String name, String home_adress, String home_town, int home_zipCode, String home_country,
 					String home_phone, String work_adress, String work_town,int work_zipCode ,String work_country,
-					String work_phone, int debt) 
+					String work_phone, int debt) throws MyException
 	{
+		if (name.isEmpty()) {
+			throw new MyException("SYmplirose to onoma einai keno");
+		}
+		else if (home_adress.isEmpty()) {
+			JOptionPane.showMessageDialog(null,  "home adress field is empty ");
+			return;
+		}
+		else if (home_town.isEmpty()) {
+			JOptionPane.showMessageDialog(null,  "home zip code field is empty ");
+			return;
+		}
+		else if (home_zipCode == 0) {
+			JOptionPane.showMessageDialog(null,  "home town field is empty ");
+			return;
+		}
+		else if (home_country.isEmpty()) {
+			JOptionPane.showMessageDialog(null,  "home country field is empty ");
+			return;
+		}
+		else if (home_phone.isEmpty()) {
+			JOptionPane.showMessageDialog(null,  "home phone number field is empty ");
+			return;
+		}
+		
+		else if (work_adress.isEmpty()) {
+			JOptionPane.showMessageDialog(null,  "work adress field is empty ");
+			return;
+		}
+		else if (work_town.isEmpty()) {
+			JOptionPane.showMessageDialog(null,  "work town field is empty ");
+			return;
+		}
+		else if (work_zipCode == 0) {
+			JOptionPane.showMessageDialog(null,  "work country is empty ");
+			return;
+		}
+		else if (work_country.isEmpty()) {
+			JOptionPane.showMessageDialog(null,  "work zip code field is empty ");
+			return;
+		}
+		else if (work_phone.isEmpty()) {
+			JOptionPane.showMessageDialog(null,  "work phone number field is empty ");
+			return;
+		}
+		
+		else if (debt == 0) {
+			JOptionPane.showMessageDialog(null,  "work phone number field is empty ");
+			return;
+		}
+		else {
+
 		this.name = name;
 		homeAdress.setAdress(home_adress);
 		homeAdress.setTown(home_town);
@@ -36,7 +90,7 @@ public class Employee {
 		
 		this.debt = debt;
 		reminder = 0;
-		
+		}
 	}
 	
 	

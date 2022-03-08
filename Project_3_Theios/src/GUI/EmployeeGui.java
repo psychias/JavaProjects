@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import exception.MyException;
 import main.Main;
 import model.Employee;
 
@@ -41,7 +42,7 @@ public class EmployeeGui extends JFrame {
 	private JTable table = new JTable();;
 	private JScrollPane scrollPane = new JScrollPane();
 	private DefaultTableModel model;
-
+    private int row;
 	public EmployeeGui() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1003, 591);
@@ -174,65 +175,10 @@ public class EmployeeGui extends JFrame {
 
 			public void actionPerformed(ActionEvent e) {
 	
-				if (textFieldName.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null,  "name field is empty ");
-					return;
-				}
-				else if (textHomeAdress.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null,  "home adress field is empty ");
-					return;
-				}
-				else if (textHomeZip.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null,  "home zip code field is empty ");
-					return;
-				}
-				else if (textHomeTown.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null,  "home town field is empty ");
-					return;
-				}
-				else if (textHCountry.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null,  "home country field is empty ");
-					return;
-				}
-				else if (textHPhone.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null,  "home phone number field is empty ");
-					return;
-				}
-				
-				else if (textWAdress.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null,  "work adress field is empty ");
-					return;
-				}
-				else if (textWTown.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null,  "work town field is empty ");
-					return;
-				}
-				else if (textWCountry.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null,  "work country is empty ");
-					return;
-				}
-				else if (textWZipCode.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null,  "work zip code field is empty ");
-					return;
-				}
-				else if (textWPhone.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null,  "work phone number field is empty ");
-					return;
-				}
-				
-				else if (textWPhone.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null,  "work phone number field is empty ");
-					return;
-				}
-				else if (textAmount.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null,  "the amount field is empty ");
-					return;
-				}else {
-
 					addEmployee();
 	//				String text = textFieldName.getText() + " " + textHomeAdress.getText();
 	//				messageShow message = new messageShow(text);
-					}
+					
 
 			}
 		});
@@ -253,8 +199,12 @@ public class EmployeeGui extends JFrame {
 		btnDelete.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				delete();
+			public void actionPerformed(ActionEvent e1) {
+				
+				delete(row);
+				
+				repaint();
+				
 			}
 		});
 		btnDelete.setBounds(258, 405, 117, 29);
@@ -272,7 +222,7 @@ public class EmployeeGui extends JFrame {
 
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				int row = table.rowAtPoint(e.getPoint());
+				row = table.rowAtPoint(e.getPoint());
 				textFieldName.setText(Main.employees.get(row).getName());
 				textHomeAdress.setText(Main.employees.get(row).getHomeAdress().getAdress());
 				textHomeTown.setText(Main.employees.get(row).getHomeAdress().getTown());
@@ -312,16 +262,31 @@ public class EmployeeGui extends JFrame {
 		String name = textFieldName.getText();
 		String homeAdress = textHomeAdress.getText();
 		String homeTown = textHomeTown.getText();
-		int homeZipCode = Integer.valueOf(textHomeZip.getText());
+		int homeZipCode = 0;
+		try {
+			homeZipCode = Integer.valueOf(textHomeZip.getText());
+		}catch(NumberFormatException ex) {
+			homeZipCode =9999;
+		}
 		String homeCountry = textHCountry.getText();
 		String homePhone = textHPhone.getText();
 
 		String workAdress = textWAdress.getText();
 		String workTown = textWTown.getText();
-		int workZipCode = Integer.valueOf(textWZipCode.getText());
+		int workZipCode =0;
+		try {
+			workZipCode = Integer.valueOf(textWZipCode.getText());
+		}catch(NumberFormatException ex) {
+			workZipCode =9999;
+		}
 		String workCountry = textWCountry.getText();
 		String workPhone = textWPhone.getText();
-		int debt = Integer.valueOf(textAmount.getText());
+		int debt = 0;
+		try {
+			debt = Integer.valueOf(textAmount.getText());
+		}catch(NumberFormatException ex) {
+			debt =0;
+		}
 
 		for (Employee e : Main.employees) {
 			if (e.getName().equals(name)) {// && e.getHomeAdress().getPhone().equals(homePhone)) {
@@ -330,35 +295,34 @@ public class EmployeeGui extends JFrame {
 			}
 		}
 
-		Employee emp = new Employee(name, homeAdress, homeTown, homeZipCode, homeCountry, homePhone, workAdress,
-				workTown, workZipCode, workCountry, workPhone, debt);
+		Employee emp;
+		try {
+			emp = new Employee(name, homeAdress, homeTown, homeZipCode, homeCountry, homePhone, workAdress,
+					workTown, workZipCode, workCountry, workPhone, debt);
+			Main.employees.add(emp);
+			Object[] objs = { emp.getName(), emp.getDebt(), emp.getHomeAdress().getPhone(), emp.getWorkAdress().getPhone(),
+					emp.getReminder() };
 
-		Main.employees.add(emp);
-		for (Employee e : Main.employees) {
-			e.Reminder();
+			model.addRow(objs);
+			repaint();
+//			for (Employee e : Main.employees) {
+//				e.Reminder();
+//
+//			}
 
+		} catch (MyException e1) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(btnSubmit, e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+//			e1.printStackTrace();
 		}
 
+		
 	}
 	
-	protected void delete(){
+	protected void delete(int row){
+			Main.employees.remove(row);
+			model.removeRow(row);
+			this.clearText();
 		
-		//get table model 
-		//DefaultTableModel model = (DefaultTableModel) table.getModel();
-		
-		
-		//delete row
-		if(table.getRowCount() == 1) {
-			model.removeRow(table.getSelectedRow());
-			
-		}else {
-			if(table.getRowCount() == 0) {
-				JOptionPane.showMessageDialog(this, "Table is empty");
-			
-		}else {
-			JOptionPane.showMessageDialog(this, "choose a single row to delete");
-			}
-		}
-
 	}
 }
